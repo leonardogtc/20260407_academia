@@ -1,0 +1,43 @@
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+
+class Integrantes(AbstractUser):
+    # O AbstractUser já tem: username, first_name, last_name, email, password,
+    # is_staff, is_active, date_joined.
+    # Campo para a hierarquia (Pai/Professor)
+    # 'self' permite que um integrante aponte para outro integrante
+    instrutor = models.ForeignKey(
+        'self', null=True, blank=True, on_delete=models.SET_NULL,
+        related_name='alunos'
+    )
+
+    # Informações básicas que você solicitou
+    data_nascimento = models.DataField(null=True, blank=True)
+    cpf = models.CharField(max_length=14, unique=True, null=True, blank=True)
+
+    # Telefone e WhatsApp
+    # Usaremos CharField porque telefones levam parênteses, traços e espaços
+    telefone = models.CharField(
+        max_length=20, null=True, blank=True, verbose_name='Telefone/WhatsApp')
+
+    # Sobrescrevendo o e-mail para torná-lo obrigatório ou único, se desejar.
+    email = models.EmailField(unique=True, null=False,
+                              blank=False, verbose_name='E-mail Principal')
+
+    # Status de vida do aluno
+    STATUS_CHOICES = (
+        ('A', 'Ativo'),
+        ('I', 'Inativo'),
+        ('F', 'Filiado Externo'),
+    )
+    status = models.CharField(
+        max_length=1,
+        choices=STATUS_CHOICES,
+        default='A',
+        verbose_name='Status'
+    )
+
+    def __str__(self):
+        # Uma boa prática da velha guarda: facilitar a identificação visual
+        return f"{self.get_full_name()} - {self.username}"
