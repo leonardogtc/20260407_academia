@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from hierarquia.models import Graduacao
@@ -43,6 +44,27 @@ class Integrantes(AbstractUser):
     graduacao = models.ForeignKey(
         Graduacao, null=True, blank=True, on_delete=models.PROTECT,
     )
+
+    def clean(self):
+        super().clean()
+
+        # Só validamos se houver um instrutor e ambos tiverem graduação
+        # definida
+        if self.instrutor and self.graduacao and self.instrutor.graduacao:
+            # Regra: A ordem do instrutor deve ser maior que a do aluno
+            if self.instrutor.graduacao.ordem <= self.graduacao.ordem:
+                raise ValidationError({
+                    'instrutor': (
+                        f"O instrutor {self.instrutor.get_full_name()} possui a graduação "
+                        f"'{self.instrutor.graduacao.nome}' (Nível {self.instrutor.graduacao.ordem}), "
+                        f"que não é superior à sua: '{self.graduacao.nome}' (Nível {self.graduacao.ordem})."
+                    )
+                })
+
+    def save(self, *args, **kwargs):
+        # Forçamos a validação antes de salvar no banco
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         # Uma boa prática da velha guarda: facilitar a identificação visual
