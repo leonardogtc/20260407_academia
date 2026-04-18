@@ -6,7 +6,8 @@ from hierarquia.models import Graduacao
 
 class Certificado(models.Model):
     # Identificador único para autenticação no site de cada certificado
-    chave_autenticacao = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    chave_autenticacao = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
     integrante = models.ForeignKey(
         Integrantes, on_delete=models.CASCADE, related_name='certificados')
     graduacao_alcancada = models.ForeignKey(
@@ -19,6 +20,7 @@ class Certificado(models.Model):
 
     foi_impresso_fisicamente = models.BooleanField(
         default=False, verbose_name='Certificado impresso?')
+
     class Meta:
         verbose_name = 'Certificado'
         verbose_name_plural = 'Certificados'

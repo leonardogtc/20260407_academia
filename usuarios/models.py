@@ -55,9 +55,12 @@ class Integrantes(AbstractUser):
             if self.instrutor.graduacao.ordem <= self.graduacao.ordem:
                 raise ValidationError({
                     'instrutor': (
-                        f"O instrutor {self.instrutor.get_full_name()} possui a graduação "
-                        f"'{self.instrutor.graduacao.nome}' (Nível {self.instrutor.graduacao.ordem}), "
-                        f"que não é superior à sua: '{self.graduacao.nome}' (Nível {self.graduacao.ordem})."
+                        f"O instrutor {self.instrutor.get_full_name()} "
+                        f"possui a graduação "
+                        f"'{self.instrutor.graduacao.nome}' "
+                        f"(Nível {self.instrutor.graduacao.ordem}), "
+                        f"que não é superior à sua: '{self.graduacao.nome}' "
+                        f"(Nível {self.graduacao.ordem})."
                     )
                 })
 
