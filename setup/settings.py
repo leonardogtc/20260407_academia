@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'usuarios',
     'hierarquia',
     'certificados',
+    'comunicacao',
 ]
 
 MIDDLEWARE = [
