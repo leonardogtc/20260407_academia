@@ -5,6 +5,10 @@ from usuarios.models import Integrantes
 class CategoriaDespesa(models.Model):
     nome = models.CharField(max_length=100)
 
+    class Meta:
+        verbose_name = "Categoria de Despesa"
+        verbose_name_plural = "Categorias das Despesas"
+
     def __str__(self):
         return self.nome
 
@@ -30,6 +34,10 @@ class PagamentoGraduacao(models.Model):
     valor = models.DecimalField(max_digits=10, decimal_places=2)
     data_pagamento = models.DateField(auto_now_add=True)
     confirmado = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "Pagamento de Graduação"
+        verbose_name_plural = "Pagamentos das Graduações"
 
     def __str__(self):
         return f"Pagamento: {self.aluno.first_name} - R$ {self.valor}"

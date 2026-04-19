@@ -69,6 +69,10 @@ class Integrantes(AbstractUser):
         self.full_clean()
         super().save(*args, **kwargs)
 
+    class Meta:
+        verbose_name = "Integrante"
+        verbose_name_plural = "Integrantes"
+
     def __str__(self):
         # Uma boa prática da velha guarda: facilitar a identificação visual
         return f"{self.get_full_name()} - {self.username}"
