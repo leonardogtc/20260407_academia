@@ -33,22 +33,33 @@ class Evento(models.Model):
                     "É um registro histórico."
                 )
 
-    class Aviso(models.Model):
-        titulo = models.CharField(max_length=200)
-        texto = models.TextField()
-        autor = models.ForeignKey(
-            Integrantes,
-            on_delete=models.CASCADE,
-            limit_choices_to={'is_staff': True}
-        )
 
-        permite_comentarios = models.BooleanField(default=False)
-        publicado = models.BooleanField(default=True)
+class Aviso(models.Model):
+    titulo = models.CharField(max_length=200)
+    texto = models.TextField()
+    autor = models.ForeignKey(
+        Integrantes,
+        on_delete=models.CASCADE,
+        limit_choices_to={'is_staff': True}
+    )
 
-        data_postagem = models.DateTimeField(auto_now_add=True)
+    permite_comentarios = models.BooleanField(default=False)
+    publicado = models.BooleanField(default=True)
 
-        class Meta:
-            ordering = ['-data_postagem']
+    data_postagem = models.DateTimeField(auto_now_add=True)
 
-        def __str__(self):
-            return self.titulo
+    class Meta:
+        ordering = ['-data_postagem']
+
+    def __str__(self):
+        return self.titulo
+
+
+class FotoEvento(models.Model):
+    evento = models.ForeignKey(
+        Evento, on_delete=models.CASCADE, related_name='fotos')
+    foto = models.ImageField(upload_to='eventos/galeria/')
+    descricao = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return f"Foto do evento: {self.evento.titulo}"
