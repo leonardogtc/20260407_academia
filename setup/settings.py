@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'hierarquia',
     'certificados',
     'comunicacao',
+    'financeiro',
 ]
 
 MIDDLEWARE = [
